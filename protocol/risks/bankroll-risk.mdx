@@ -1,0 +1,54 @@
+---
+title: "Bankroll Risk"
+description: "Understand the risks of depositing into the Scatter Bankroll Vault."
+---
+
+The [Scatter Bankroll Vault](/protocol/scatter-bankroll-vault) is the counterparty to every bet placed on Scatter. Over time, the vault is expected to capture the house edge across all games. Over shorter periods, variance can drive the vault into drawdown. This page describes what a bad run looks like and how the system bounds the worst case.
+
+### How drawdowns happen
+
+The vault loses money when players win. Specifically:
+
+* A player wins a bet of size B, and the vault pays out the player's net winnings.
+* If a player hits a high-multiplier outcome the loss for the vault on that single bet can be substantial.
+* If many players run good in a short window, multiple losses compound before variance offsets them
+
+SBV value tracks vault NAV continuously. When the vault is in drawdown, SBV value is below its prior high.
+
+### Variance and the law of large numbers
+
+In expectation, the vault retains 5% of theoretical gross gaming revenue on each bet, equivalent to a small fraction of bet volume. This expectation only holds in aggregate.
+
+For any individual bet:
+
+* The vault might win or lose dramatically.
+* High-variance games (blitz, dice) produce larger swings per bet than low-variance games (blackjack).
+* Over enough bets across a diverse mix of games and players, realized PnL converges toward the expected value. The required volume for convergence depends on game mix and bet sizes.
+
+The vault does not guarantee a positive return over any specific period.
+
+### What a bad run can look like
+
+A "bad run" is any sustained period where realized PnL is below expectation. Examples include:
+
+* A small number of players hitting high-multiplier outcomes in succession.
+* A long run of player-favorable variance with no offsetting house wins.
+* A single bet at the maximum size resolving against the vault on a high-volatility game.
+
+During a bad run, SBV value declines and stays below its prior high until edge accrual catches up. Recovery time depends on play volume, game mix, and how deep the drawdown went.
+
+### Mitigations
+
+* Diverse game mix: The vault's exposure is spread across every game on the platform. No single game concentrates the vault's risk.
+* Continuous edge accrual: Every bet, win or lose for any individual player, contributes to theoretical edge. The longer the vault operates, the more edge accrual stacks against any drawdown.
+* Per-game transparency: Every game's house edge, current volume, and PnL contribution are surfaced in the Scatter app. Depositors can monitor concentration in real time.
+
+### What depositors should know
+
+* The vault can lose money over arbitrary periods.
+* SBV value can fall below the value at which you deposited.
+* The 1-day deposit lock means you cannot exit the vault during the lock window, including during a drawdown.
+* Returns are not guaranteed.
+* Past edge accrual is not predictive of future edge accrual.
+
+If you are not comfortable with these properties, the vault is not appropriate for you.

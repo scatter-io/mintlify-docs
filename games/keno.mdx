@@ -1,0 +1,85 @@
+---
+title: "Keno"
+description: "Learn how Keno works on Scatter."
+---
+
+### Overview
+
+A 40-tile keno variant. Pick up to 10 tiles, 10 tiles are drawn without replacement, and your payout depends on how many of your picks hit and your risk level.
+
+### How to play
+
+1. Pick 1 to 10 tiles from a 40-tile board.
+2. Choose a risk level: Classic, Low Risk, Medium Risk, or High Risk.
+3. Place your bet. 10 unique tiles are drawn from the 40.
+4. Your payout multiplier is looked up by `(picks, risk, hits)` against the payout table.
+
+### Rules and configuration
+
+* Total tiles: 40
+* Selectable picks: 1 to 10
+* Tiles drawn per round: 10 (sampled without replacement)
+* Risk levels: Classic, Low Risk, Medium Risk, High Risk
+
+Risk profiles:
+
+* Classic: pays small wins at lower hit counts with a moderate top end.
+* Low Risk: pays slightly more often at low and mid hit counts, with smaller mid-tier multipliers and a high top end.
+* Medium Risk: drops the lowest hits to 0 and shifts payout weight toward higher hit counts.
+* High Risk: pays 0 for partial hits and rewards aggressively only as your hits approach your picks.
+
+### Payouts
+
+Payout multipliers are looked up by `(picks, risk, hits)`. There is one row per pick count (1 through 10\) and an entry for each possible hit count (0 through picks). The full tables for every pick count are visible in the game UI.
+
+Example: Pick 10
+
+| hits | Classic | Low Risk | Medium Risk | High Risk |
+| ----- | ----- | ----- | ----- | ----- |
+| 0 | 0 | 0 | 0 | 0 |
+| 1 | 0 | 0 | 0 | 0 |
+| 2 | 0 | 1.1 | 0 | 0 |
+| 3 | 1.4 | 1.2 | 1.6 | 0 |
+| 4 | 2.25 | 1.3 | 2 | 3.5 |
+| 5 | 4.5 | 1.8 | 4 | 8 |
+| 6 | 8 | 3.5 | 7 | 13 |
+| 7 | 17 | 13 | 26 | 63 |
+| 8 | 50 | 50 | 100 | 500 |
+| 9 | 80 | 250 | 500 | 800 |
+| 10 | 100 | 1000 | 1000 | 1000 |
+
+The top-end multipliers at 10-of-10 hits reach 1000× for Low / Medium / High Risk, and 100× for Classic. Tables for other pick counts have the same structural shape, with multipliers scaled accordingly.
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: bounded by the highest entry in the payout table. For Pick 10 across Low / Medium / High Risk, this is 1000×.
+
+### Fairness
+
+Keno uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The 10 drawn tiles are derived deterministically from these inputs by repeatedly mapping segments of the VRF output to indices in the remaining pool and removing each drawn tile. The hit count is your selection intersected with the drawn tiles, and the multiplier is looked up against the payout table.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Keno bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, your selections, the drawn tiles, and the resolved multiplier.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.
+
+Locked. Here's Limbo:
+
+---

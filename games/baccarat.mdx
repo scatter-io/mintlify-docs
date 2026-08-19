@@ -1,0 +1,63 @@
+---
+title: "Baccarat"
+description: "Learn how Baccarat works on Scatter."
+---
+
+### Overview
+
+Standard Punto Banco baccarat played as a single round between two hands: Player and Banker. Place chips on Player, Banker, and/or Tie in any combination. The on-chain program deals both hands from a VRF-seeded shoe and settles every chip in one transaction.
+
+### How to play
+
+1. Place chips on any combination of Player, Banker, or Tie.
+2. Press deal.
+3. Two hands are dealt, with a possible third card per standard Punto Banco rules. Both hands are compared by value mod 10. Each chip you placed is settled independently against the final outcome.
+
+### Rules and configuration
+
+* Bet types: Player, Banker, and Tie. No side bets (Pair, Dragon Bonus, etc. are not implemented).
+* Multiple bets per round: You can place any combination of the three bet types in a single round, including all three.
+* Card values: Ace = 1, 2 through 9 face value, 10 / Jack / Queen / King = 0. Hand value is the sum mod 10.
+* Third-card rules: Standard Punto Banco. Player and Banker third-card draws are determined by the standard table.
+* Cards per hand: Up to 3.
+* Ties do not push: On a Tie outcome, only Tie chips win. Player and Banker chips lose.
+
+### Payouts
+
+| Outcome | Payout on matching chip |
+| ----- | ----- |
+| Player win | 2.00× |
+| Banker win | 1.95× |
+| Tie | 9.00× |
+
+Losing chips return 0.
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap. The limit applies to the total chips placed in the round.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. The client checks the maximum possible payout across all chips against this cap before submitting the bet.
+
+### Fairness
+
+Baccarat uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each round incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past round can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The card sequence and the third-card decisions are derived deterministically from these inputs. The VRF guarantees the randomness was honestly generated. The seed commit-reveal guarantees the result was not manipulated after the fact.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Baccarat bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, the dealt cards for both hands, and the chip placements.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

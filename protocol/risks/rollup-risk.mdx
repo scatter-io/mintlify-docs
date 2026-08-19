@@ -1,0 +1,44 @@
+---
+title: "Rollup Risk"
+description: "Understand the risks introduced by Scatter rollup execution."
+---
+
+Scatter [executes games on a MagicBlock Ephemeral Rollup](/protocol/game-engine), with settlement to Solana mainnet. This design delivers the latency needed for real-time play while preserving on-chain verifiability. It also introduces a set of risks that players, vault depositors, and SHFL holders should understand.
+
+### How the rollup interacts with mainnet
+
+A bet placed on Scatter is processed inside the Ephemeral Rollup, resolves within milliseconds, and is then settled back to Solana mainnet. Mainnet is the source of truth: the final state of any bet, vault position, or buyback is whatever Solana records.
+
+Between execution in the rollup and settlement on mainnet, the bet result is held in the rollup. During this window, the rollup operator has temporary authority over the state.
+
+### Trust assumptions
+
+In the current configuration, players and depositors trust:
+
+* MagicBlock's rollup operators to faithfully execute transactions and commit accurate state to Solana
+* Solana mainnet to settle final state without reorganization or censorship
+* [VRF](/protocol/provable-fairness/verifiable-randomness) infrastructure to produce verifiable randomness without manipulation
+
+Scatter does not operate the rollup. The rollup is operated by MagicBlock, an independent infrastructure provider.
+
+### Failure modes
+
+* Operator equivocation: A malicious or compromised rollup operator could attempt to commit invalid state to mainnet. [Verifier nodes](/protocol/provable-fairness/verifier-nodes) monitoring the rollup independently can detect this.
+* Settlement delay: The rollup may experience delays in committing state to mainnet. Bets and balances are still correctly recorded eventually, but final settlement could be slower than usual.
+* Rollup liveness: A regional rollup outage may temporarily prevent new bets from being placed in that region. Existing balances and previously settled bets are unaffected.
+* Censorship: A rollup operator could in principle refuse to include a transaction. Players retain the ability to interact with Solana mainnet directly for non-rollup operations.
+
+### Mitigations
+
+* Mainnet settlement: Every bet, deposit, and withdrawal settles to Solana mainnet, where it is fully verifiable on-chain.
+* Provably fair derivation: Scatter's verification system lets any player re-derive the outcome of their bets from on-chain inputs, independent of the rollup.
+* Redundant leaders: Each rollup runs with redundant leaders. If one leader becomes unavailable or fails, another takes over without interrupting play. This reduces reliance on any single leader and improves system availability if one or more nodes go down.
+* Regional redundancy: Scatter operates rollups in multiple regions (AS, EU, US). If one region degrades, traffic can be routed to another.
+* Verifier nodes: Anyone can run a verifier node that watches Ephemeral Rollup activity and independently validates state transitions. Players, depositors, and third parties are encouraged to run their own to monitor the rollup directly.
+* Multi-sig and timelock controls: Configuration changes to Scatter's smart contracts require multi-sig approval and a timelock delay, limiting the blast radius of any single operator's actions.
+
+### What this means for you
+
+* Players: Your funds settle to Solana mainnet at the end of every session. The risk of a rollup malfunction affecting your balance is bounded and short-lived. Bet outcomes are verifiable.
+* [Vault depositors](/protocol/scatter-bankroll-vault): SBV is settled on Solana mainnet. Vault PnL is computed from on-chain bet activity. Rollup risk is shared across all depositors.
+* SHFL holders: Buybacks execute on Solana mainnet from treasury balances that themselves settle on Solana. Rollup risk does not directly affect the buyback flow

@@ -1,0 +1,46 @@
+---
+title: "FAQ"
+description: "Find answers to common questions about Scatter."
+---
+
+<AccordionGroup>
+  <Accordion title="What is Scatter?">
+    Scatter is an onchain casino built on Solana. Every bet is placed, settled, and verifiable onchain through audited smart contracts. Scatter is designed to be transparent, non-custodial, and community-owned.
+  </Accordion>
+
+  <Accordion title="Is Scatter non-custodial?">
+    Yes. Your funds stay in your embedded wallet until you place a bet, swap, withdraw, or deposit into the vault. Scatter does not maintain a separate internal balance that it controls on your behalf.
+  </Accordion>
+
+  <Accordion title="What is Cash on Scatter?">
+    Cash is USDC on Solana. Scatter uses Cash as the primary balance for betting, deposits, withdrawals, swaps, rewards, and vault deposits.
+  </Accordion>
+
+  <Accordion title="What chains and tokens can I deposit or withdraw?">
+    Scatter supports deposits and withdrawals across Solana, EVM chains, Bitcoin, Tron, and several additional networks. Supported assets vary by chain and are shown in the deposit or withdrawal modal before you confirm.
+  </Accordion>
+
+  <Accordion title="Can I swap between Cash and SHFL?">
+    Yes. The in-app Swap feature lets you convert between Cash and SHFL. The swap executes against the SHFL/USDC pool on Raydium, and Scatter does not charge an additional swap fee.
+  </Accordion>
+
+  <Accordion title="How are Scatter game outcomes generated and verified?">
+    Scatter games use onchain [VRF randomness](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal. Each bet exposes the inputs needed to re-derive the outcome, and the [Verify button](/protocol/provable-fairness/overview) lets you confirm that the result matches the published onchain data.
+  </Accordion>
+
+  <Accordion title="What is the Scatter Bankroll Vault?">
+    The [Scatter Bankroll Vault](/protocol/scatter-bankroll-vault) is the community-owned bankroll that takes the other side of every bet on the platform. When you deposit Cash into the vault, you receive SBV, which represents your proportional share of the vault.
+  </Accordion>
+
+  <Accordion title="Can the Bankroll Vault lose money?">
+    Yes. The vault absorbs the variance of every bet on Scatter. It can lose money over short periods when players win, especially during high-multiplier outcomes or player-favorable streaks. [Vault returns are not guaranteed](/protocol/risks/bankroll-risk).
+  </Accordion>
+
+  <Accordion title="How does the SHFL buyback work?">
+    A portion of every bet’s theoretical gross gaming revenue is routed to [SHFL buybacks](/protocol/shfl-token). Buyback-allocated revenue accumulates in USDC, then executes against the SHFL/USDC pool on Solana and burns the acquired SHFL.
+  </Accordion>
+
+  <Accordion title="What rewards does Scatter offer?">
+    Scatter has four mechanical reward components: [rakeback, reload, level-up](/protocol/bonusing), and [referrals](/protocol/referrals). Rewards are calculated automatically from onchain activity and are not subject to wagering requirements.
+  </Accordion>
+</AccordionGroup>

@@ -1,0 +1,50 @@
+---
+title: "Withdraw"
+description: "Learn how withdrawals work on Scatter."
+---
+
+Scatter is non-custodial. Your Cash and SHFL balances sit in your embedded wallet, so withdrawing simply moves funds out of your wallet to a destination of your choice.
+
+### Before you withdraw
+
+You need a positive Cash or SHFL balance in your Scatter wallet. There are no holds on deposited or won funds.
+
+### What you can withdraw
+
+Scatter holds two balance types on Solana: Cash (USDC on Solana) and SHFL. You can withdraw either directly to a Solana address, or convert and send to a different chain through the withdraw modal.
+
+<Note>
+  The exact supported destinations, routing path, network fee, and expected output are shown in the withdraw modal before you confirm.
+</Note>
+
+| Chain | Address Type | Min Withdrawal | Example Tokens |
+| --- | --- | --- | --- |
+| Ethereum | EVM | $7 | ETH, USDC, USDT, WBTC, DAI, LINK, UNI, AAVE |
+| Polygon | EVM | $2 | POL, USDC, USDT, DAI, WETH, SAND |
+| Arbitrum | EVM | $2 | ETH, ARB, USDC, USDT, DAI, WBTC, USDe |
+| Base | EVM | $2 | ETH, USDC, USDT, DAI, cbBTC, AERO, USDS |
+| Optimism | EVM | $2 | ETH, OP, USDC, USDT, DAI, USDe |
+| BNB Smart Chain | EVM | $2 | BNB, USDC, USDT, DAI, ETH, BTCB, BUSD |
+| Solana | SVM | $2 | SOL, USDC, USDT, USDe, TRUMP |
+| Bitcoin | BTC | $9 | BTC |
+| Tron | TVM | $9 | USDT, TRX |
+| HyperEVM | EVM | $2 | HYPE, USDC, USDe, stHYPE, UBTC, UETH |
+| Abstract | EVM | $2 | ETH, USDC, USDT |
+| Monad | EVM | $2 | MON, USDC, USDT |
+| Ethereal | EVM | $2 | USDe, WUSDe |
+| Katana | EVM | $2 | AUSD |
+| Lighter | EVM | $2 | USDC |
+
+### Withdraw timing
+
+* Solana: under 30 seconds
+* EVM chains: 1 to 3 minutes
+* Bitcoin: 10 to 30 minutes (2 confirmations)
+* Tron: 1 to 2 minutes
+
+Once the destination chain confirms, funds are available at the address you specified.
+
+### Fees and refunds
+
+* Network fees are deducted from the withdrawal amount. The modal shows the expected output before you confirm.
+* Failed swaps are refunded automatically to your Scatter wallet. Refund timing varies by chain.

@@ -1,0 +1,84 @@
+---
+title: "Plinko"
+description: "Learn how Plinko works on Scatter."
+---
+
+### Overview
+
+Drop a ball through a peg pyramid. At each row it bounces left or right with even odds. The bin it lands in determines your payout multiplier.
+
+### How to play
+
+1. Pick the row count between 8 and 16. More rows means more bounces and more bins.
+2. Pick a risk level: Low, Medium, or High.
+3. Place your bet and drop. The ball makes `row_count` bounces and lands in one of `row_count + 1` bins.
+4. Your payout is `bet × multiplier[final_bin]`.
+
+### Rules and configuration
+
+* Row counts: 8, 9, 10, 11, 12, 13, 14, 15, or 16.
+* Bins per round: row count + 1.
+* Risk levels: Low, Medium, High.
+* Bounce odds: 50/50 left or right at each peg, independently.
+
+Risk profiles:
+
+* Low Risk: most bins pay close to 1×, with modest edge-bin multipliers and small center-bin returns.
+* Medium Risk: wider spread, larger edge-bin multipliers, lower center-bin payouts.
+* High Risk: very high edge-bin multipliers, with center bins often paying well below 1×.
+
+### Payouts
+
+Each combination of row count, risk level, and house edge has its own multiplier table. Tables are symmetric around the center bin: edge bins pay the most, center bins pay the least. The full tables are visible in the game UI.
+
+Examples at 1% edge:
+
+8 rows
+
+| Setup | Multipliers (left to right) |
+| ----- | ----- |
+| Low | 6, 2.1, 1.1, 1, 0.5, 1, 1.1, 2.1, 6 |
+| Medium | 13, 3, 1.3, 0.7, 0.4, 0.7, 1.3, 3, 13 |
+| High | 29, 4, 1.5, 0.3, 0.2, 0.3, 1.5, 4, 29 |
+
+16 rows
+
+| Setup | Multipliers (left to right) |
+| ----- | ----- |
+| Low | 16, 9, 2, 1.4, 1.4, 1.2, 1.1, 1, 0.5, 1, 1.1, 1.2, 1.4, 1.4, 2, 9, 16 |
+| Medium | 110, 41.1, 10, 5, 3, 1.5, 1, 0.5, 0.3, 0.5, 1, 1.5, 3, 5, 10, 41.1, 110 |
+| High | 1000, 129.9, 26.1, 9, 4, 2, 0.2, 0.2, 0.2, 0.2, 0.2, 2, 4, 9, 26.1, 129.9, 1000 |
+
+The maximum reachable multiplier across all configurations is 1000× (16-row High Risk, outermost bins).
+
+Many center-bin multipliers are below 1, meaning the ball landing in those bins returns less than your stake. This is intentional and balances against the high edge-bin multipliers across the distribution.
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. Also bounded structurally by the largest multiplier in the active table (1000× at 16-row High Risk).
+
+### Fairness
+
+Plinko uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The VRF output is unpacked into a sequence of `row_count` independent left/right bounces, each 50/50. The final bin index is the count of right-bounces. The multiplier is looked up against the table for your chosen row count, risk level, and the active house edge.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Plinko bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, row count, risk level, and resolved bin.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

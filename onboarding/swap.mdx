@@ -1,0 +1,58 @@
+---
+title: "Swap"
+description: "Learn how to swap between Cash and SHFL in the Scatter app."
+---
+
+The Swap feature lets you convert between Cash and SHFL inside the Scatter app. It exists so you can easily switch which currency you bet in without leaving the platform.
+
+### What you can swap
+
+**Cash** (USDC on Solana) ↔ **SHFL**
+
+Other directions and assets are not supported in the in-app swap. To convert from other assets, deposit through the [deposit modal](/onboarding/depositing) and the routing is handled for you.
+
+### How it works
+
+<Steps>
+  <Step title="Open Swap">
+    Open Swap in the Scatter app.
+  </Step>
+  <Step title="Choose direction">
+    Choose Cash → SHFL or SHFL → Cash.
+  </Step>
+  <Step title="Enter amount">
+    Enter the amount to swap. The expected output is shown before you confirm.
+  </Step>
+  <Step title="Confirm transaction">
+    Confirm the transaction from your embedded wallet.
+  </Step>
+</Steps>
+
+The swap is executed against the SHFL/USDC pool on Raydium. The transaction is non-custodial: tokens transfer between your wallet and the pool directly, with no intermediate Scatter-controlled balance.
+
+### Liquidity and slippage
+
+Large swaps can move the pool price meaningfully, leading to higher price impact and worse execution than the quoted rate suggests.
+
+<Warning>
+  If the pool price moves beyond your slippage tolerance between quote and execution, the transaction may revert.
+</Warning>
+
+Before swapping a large amount:
+
+* Check the price impact shown in the swap UI. A large impact indicates thin liquidity at your size.
+* Consider splitting the swap into smaller transactions across time.
+* Set a tighter slippage tolerance to prevent execution at unexpectedly bad prices.
+
+### Fees
+
+* Pool fees: The Raydium fee for the SHFL/USDC pool is included in the quoted output. The quote reflects the actual amount you will receive at the current pool price.
+* Network fees: Standard Solana transaction fees apply.
+
+Scatter does not charge an additional swap fee. The full route cost is the Raydium fee plus network costs.
+
+### Limits
+
+There is no minimum swap amount enforced by Scatter, though very small swaps may not be cost-effective due to network fees.
+
+The maximum swap amount is bounded by available liquidity in the underlying pool.

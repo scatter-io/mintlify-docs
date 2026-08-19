@@ -1,0 +1,94 @@
+---
+title: "Blitz"
+description: "Learn how Blitz works on Scatter."
+---
+
+### Overview
+
+Pick a target number of unique cards. The deck flips cards one at a time. If you reach your target without any duplicate appearing, you win at the multiplier for that target. If a duplicate appears first, the round ends with payout 0.
+
+### How to play
+
+1. Choose a target between 5 and 36 unique cards.
+2. Place your bet.
+3. Cards are drawn one at a time from a 52-card pool with replacement. The round ends when either:
+   * Your target number of unique cards is reached (you win at the target's multiplier), or
+   * A duplicate card appears (the round loses with payout 0).
+
+### Rules and configuration
+
+* Card pool: 52 cards.
+* Sampling: with replacement. Each draw is an independent uniform sample from the 52-card pool.
+* Target range: 5 to 36 unique cards.
+* Round end: hitting your target (win) or any duplicate appearing (loss).
+
+### Payouts
+
+The payout multiplier is fixed per target and scales with the difficulty of the streak. At 2% edge:
+
+| Target | Multiplier |
+| ----- | ----- |
+| 5 | 1.19× |
+| 6 | 1.32× |
+| 7 | 1.49× |
+| 8 | 1.73× |
+| 9 | 2.04× |
+| 10 | 2.47× |
+| 11 | 3.06× |
+| 12 | 3.87× |
+| 13 | 5.04× |
+| 14 | 6.72× |
+| 15 | 9.19× |
+| 16 | 12.92× |
+| 17 | 18.66× |
+| 18 | 27.72× |
+| 19 | 42.40× |
+| 20 | 66.81× |
+| 21 | 108.56× |
+| 22 | 182.10× |
+| 23 | 315.64× |
+| 24 | 565.98× |
+| 25 | 1,051.10× |
+| 26 | 2,024.34× |
+| 27 | 4,048.68× |
+| 28 | 8,421.26× |
+| 29 | 18,246.06× |
+| 30 | 41,251.96× |
+| 31 | 97,504.63× |
+| 32 | 241,440.04× |
+| 33 | 627,744.11× |
+| 34 | 1,718,036.50× |
+| 35 | 4,963,216.57× |
+| 36 | 15,181,603.62× |
+
+A losing round (duplicate before target) pays 0. The maximum reachable multiplier is 15,181,603.62× at a target of 36.
+
+### House edge
+
+The house edge is 2%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. Bounded structurally by the largest multiplier (15,181,603.62× at target 36).
+
+### Fairness
+
+Blitz uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The sequence of cards is derived deterministically from these inputs by repeatedly mapping segments of the VRF output to indices in the 52-card pool. Cards are drawn one at a time and checked against the cards drawn so far; the first duplicate or the target hit ends the round.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Blitz round exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, target, and the full sequence of cards drawn.
+
+* The Verify button on each round entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a round ID and reproduce the derivation card by card.
+* All artifacts are queryable directly on Solana mainnet.

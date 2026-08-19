@@ -1,0 +1,69 @@
+---
+title: "Dice"
+description: "Learn how Dice works on Scatter."
+---
+
+### Overview
+
+Classic provably-fair dice. Pick a target value and a direction, then roll. The roll resolves on a 0 to 9999 integer range (displayed as 0.00 to 99.99). You win when the roll lands on your chosen side of the target.
+
+For richer bet shapes with multiple ranges and Inside / Outside / Between Two modes, see Advanced Dice.
+
+### How to play
+
+1. Choose a direction: Above or Below.
+2. Set your target value. The slider runs from 0.05 to 99.95. You can also enter a target multiplier or win chance directly, and the UI back-solves the target.
+3. Place your bet. A single integer in 0 to 9999 is drawn:
+   * Above wins when the result is strictly greater than your target.
+   * Below wins when the result is strictly less than your target.
+
+### Rules and configuration
+
+* Directions: Above or Below.
+* Roll range: integer 0 to 9999 (10,000 buckets), displayed as 0.00 to 99.99.
+* Target bounds: the UI restricts targets to 0.05 to 99.95. Multipliers and win chances outside the allowed range (0.01% minimum win chance, 98% maximum) are rejected.
+
+### Payouts
+
+Win chance and payout multiplier are computed as follows:
+
+```
+win_chance (Above) = (10000 − target) / 10000 × 100
+win_chance (Below) = target / 10000 × 100
+multiplier         = (100 − edge) / win_chance
+payout             = bet × multiplier
+```
+
+A losing roll pays 0.
+
+Worked example: with a target of 5000 (display 50.00) and direction Above, the win chance is 50% and the multiplier is `99 / 50 = 1.98×`.
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. The program rejects bets where `bet × multiplier` would exceed this cap, even if the UI accepts the inputs.
+
+### Fairness
+
+Dice uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The roll is derived deterministically from these inputs. The VRF guarantees the randomness was honestly generated. The seed commit-reveal guarantees the result was not manipulated after the fact.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Dice bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, target, direction, and rolled number.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

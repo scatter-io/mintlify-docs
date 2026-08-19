@@ -1,0 +1,72 @@
+---
+title: "Roulette"
+description: "Learn how Roulette works on Scatter."
+---
+
+### Overview
+
+Standard American roulette played with a zero and double-zero wheel. Place chips on any combination of inside and outside bets, then spin. One VRF-driven outcome resolves every chip on the board in a single transaction.
+
+### How to play
+
+1. Place chips on any combination of bet types (straight, split, street, corner, double street, basket, dozens, columns, parity, color, halves).
+2. Spin the wheel.
+3. The wheel produces a single result from `0`, `00`, or `1` through `36`. Every winning bet is paid at its multiplier; losing bets return 0. All chips resolve together in one transaction.
+
+### Rules and configuration
+
+* Wheel: American double-zero, 38 slots (`0`, `00`, and `1` through `36`).
+* Multiple bets per spin: any combination of inside and outside bets, in any sizes.
+* Outcome: a single result drawn from the 38 slots resolves the entire board.
+* Zero and double-zero: both lose all outside bets (parity, color, half, column, dozen). Inside bets covering `0` or `00` (straight, split, street, basket, etc.) win normally.
+
+### Payouts
+
+Multipliers below are gross: the payout for a winning chip is `chip × multiplier`. A "2×" outside bet returns even money since you get back twice your stake.
+
+| Bet | Numbers covered | Multiplier |
+| ----- | ----- | ----- |
+| Straight | 1 | 36× |
+| Split | 2 | 18× |
+| Street | 3 | 12× |
+| Corner | 4 | 9× |
+| Basket (`0, 1, 2, 3, 00`) | 5 | 7× |
+| Double Street (Line) | 6 | 6× |
+| Column | 12 | 3× |
+| Dozen | 12 | 3× |
+| Parity (Even / Odd) | 18 | 2× |
+| Color (Red / Black) | 18 | 2× |
+| Half (Low 1 to 18 / High 19 to 36\) | 18 | 2× |
+
+Multiple chips resolve independently. Every winning bet's `chip × multiplier` is summed into the total payout.
+
+### House edge
+
+The house edge is 5.3%, the standard American double-zero edge. Both the zero and double-zero losing every outside bet is the source of the edge.
+
+### Limits
+
+* Maximum bet: $50,000 per spin, platform-wide cap. The limit applies to the total chips placed.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. The client computes the best-case payout across all placed chips and rejects the bet if it would exceed the cap.
+* Highest single multiplier: 36× (Straight up).
+
+### Fairness
+
+Roulette uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each spin incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past spin can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The VRF output is reduced to a single result drawn from the 38 wheel slots (`0`, `00`, or `1` through `36`). Every placed chip is then settled deterministically against that result.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Roulette spin exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, all chip placements, and the resolved number.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a spin ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

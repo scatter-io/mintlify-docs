@@ -1,0 +1,116 @@
+---
+title: "Blackjack"
+description: "Learn how Blackjack works on Scatter."
+---
+
+### Overview
+
+Single-hand blackjack against the dealer, with optional Perfect Pairs and 21+3 side bets. Standard Vegas-Strip rules: dealer stands on all 17s, double down on first two cards including after a split, single split per round, and Vegas-Strip rules on split Aces. Cards are dealt from an unlimited deck.
+
+This is the most state-heavy game on Scatter: the dealer's hole card is cryptographically committed at the start of the round and revealed only after you have completed all your decisions.
+
+### How to play
+
+1. Place a Main bet. Optionally add Perfect Pairs and/or 21+3 side bets.
+2. You receive two cards face-up. The dealer shows one upcard. The dealer's hole card is committed on-chain but hidden.
+3. If the dealer shows an Ace, you may choose to Buy Insurance or Reject Insurance.
+4. Play out your hand: Hit, Stand, Double Down, or Split (when eligible). After a split, each hand is played in sequence.
+5. Once your hands are complete, the dealer plays out their hand and the round settles.
+
+### Rules and configuration
+
+* Unlimited deck: Cards are sampled independently from a 52-card pool with replacement. There is no shuffled deck object, and previously drawn cards do not affect the probability of future draws.
+* Available actions: Hit, Stand, Double Down, Split, Buy Insurance, Reject Insurance. There is no surrender.
+* Dealer rule: Stands on all 17s, including soft 17 (S17).
+* Double Down: Allowed on the first two cards of any hand, including after a split (DAS).
+* Split: Only when the first two cards are the same rank. Maximum one split per round (no re-splitting).
+* Split Aces: Each post-split Ace hand receives exactly one card and auto-finishes. No further hits.
+* Insurance: Offered only when the dealer's upcard is an Ace. Costs exactly half the main bet.
+
+### Payouts
+
+#### Main bet
+
+| Outcome | Payout |
+| ----- | ----- |
+| Blackjack (natural 21, dealer not also blackjack) | 2.5× (3:2) |
+| Win | 2× |
+| Push | 1× (stake returned) |
+| Lose | 0× |
+
+Double Down and Split: the stake doubles for that hand, and on a win pays 2× the doubled stake.
+
+#### Insurance
+
+Insurance pays 1.5× the insurance bet when the dealer reveals a natural blackjack. Otherwise, the insurance bet is lost.
+
+#### Perfect Pairs
+
+Classifies your first two cards:
+
+| Result | Payout |
+| ----- | ----- |
+| Exact Pair (same rank and same suit) | 26× |
+| Colored Pair (same rank and same color) | 11× |
+| Mixed Pair (same rank, different colors) | 7× |
+| Loss | 0× |
+
+#### 21+3
+
+Classifies your two cards plus the dealer's upcard:
+
+| Result | Payout |
+| ----- | ----- |
+| Suited Trips (same rank and same suit) | 101× |
+| Straight Flush | 51× |
+| Three of a Kind | 31× |
+| Straight | 11× |
+| Flush | 5× |
+| Loss | 0× |
+
+Side bets are resolved at the initial deal and do not depend on the dealer's hole card or the round's final outcome.
+
+### House edge
+
+The active house edge is read from the on-chain game config and is selectable from 1%, 2%, 3%, 4%, 8%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap. Applies separately to the main bet and to each side bet.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. The program pre-flights the maximum possible payout across the main bet and side bets against this cap before accepting the round.
+* Insurance: exactly half the main bet, enforced server-side.
+
+### Fairness
+
+Blackjack uses Scatter's most complete provable fairness flow because the dealer's hole card needs to be fixed at the start of the round but hidden until you have finished acting. The protocol combines on-chain [VRF](/protocol/provable-fairness/verifiable-randomness) randomness with a cryptographic commit-reveal of the dealer's hole card.
+
+#### How the hole card is bound
+
+1. Commit: At the start of the round, Scatter generates a secret and publishes a SHA-256 hash of it on-chain. The hash becomes the binding commitment.
+2. Initial deal: An on-chain VRF draws your two cards and the dealer's upcard. The dealer's hole card is not drawn yet, but is bound to the commitment.
+3. Play: You make your decisions. Each action that requires a new card triggers its own VRF draw. The hole card remains hidden.
+4. Reveal: When the round reaches the dealer's turn, Scatter releases the original secret on-chain.
+5. Verify and draw: The program recomputes the SHA-256 hash of the released secret and verifies it matches the original commitment. The hole card is then derived from the combination of the initial VRF entropy and the released secret. The dealer plays out the hand and the round settles.
+
+If the hash does not match, the round is flagged as a commit mismatch and the secret is rejected.
+
+#### What this guarantees
+
+* The dealer's hole card was fixed at the moment your bet was placed.
+* Scatter cannot change the hole card after seeing your decisions, because the commitment was pinned on-chain before any card was drawn.
+* The card is bound to randomness that includes the on-chain VRF, so it is not predictable to any single party.
+
+#### Insurance assertion
+
+When insurance is offered, Scatter additionally signs an assertion of whether the dealer has a natural blackjack. This assertion is committed on-chain at the time you choose to buy or reject insurance, before the hole card is revealed. If the actual hole card disagrees with the asserted value at reveal, the round is invalidated and the full wager is refunded.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Blackjack round exposes the following on-chain: the initial commitment, the released secret, the VRF requests and proofs for the initial deal and every player action, the client seed, the derived hole card, the full action log, and any insurance assertion.
+
+* The Verify button on each bet entry confirms the commitment matches the released secret and recomputes the hole card derivation.
+* The `/verify` page lets you paste a round ID and reproduce the verification.
+* All artifacts are queryable directly on Solana mainnet.

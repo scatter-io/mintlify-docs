@@ -1,0 +1,81 @@
+---
+title: "Limbo"
+description: "Learn how Limbo works on Scatter."
+---
+
+### Overview
+
+Pick a target multiplier. The game rolls a multiplier from a heavy-tailed distribution. If the roll meets or exceeds your target, you win at your chosen multiplier.
+
+### How to play
+
+1. Set a target multiplier between 1.01× and 1,000,000×.
+2. Place your bet.
+3. The game rolls a random multiplier. If `rolled ≥ target`, you win `bet × target`. Otherwise, the bet is lost.
+
+### Rules and configuration
+
+* Target range: 1.01× to 1,000,000× (2 decimal places of precision).
+* Roll cap: the rolled multiplier is capped at 1,000,000×. Hitting the cap still pays out at your selected target.
+* Roll distribution: heavy-tailed and continuous. Lower multipliers are much more likely than higher ones.
+
+### Payouts
+
+* Win (`rolled ≥ target`): payout = `bet × target_multiplier`
+* Loss (`rolled < target`): payout = 0
+
+Win probability is approximately:
+
+```
+win_chance ≈ (1 − edge / 100) / target_multiplier
+```
+
+At a 1% edge:
+
+| Target multiplier | Win chance |
+| ----- | ----- |
+| 1.01× | 98.02% |
+| 1.5× | 66.00% |
+| 2× | 49.50% |
+| 5× | 19.80% |
+| 10× | 9.90% |
+| 100× | 0.99% |
+| 1,000× | 0.099% |
+| 10,000× | 0.0099% |
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain.
+* Maximum target multiplier: 1,000,000×.
+
+### Fairness
+
+Limbo uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+These inputs are combined and hashed into a uniform integer, which is then transformed into the heavy-tailed multiplier distribution by the formula:
+
+```
+rolled = clamp((1 − edge / 100) / V, 1, 1,000,000)
+```
+
+where V is a uniform value derived from the combined inputs. The roll is fully deterministic given the server seed, client seed, and VRF output.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Limbo bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, target multiplier, and rolled multiplier.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

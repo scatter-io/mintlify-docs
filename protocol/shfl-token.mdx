@@ -1,0 +1,35 @@
+---
+title: "SHFL Token"
+description: "Learn how SHFL buybacks work on Scatter."
+---
+
+A portion of every bet placed on Scatter is used to programmatically buy SHFL on the open market. This page describes how that mechanism works.
+
+### Funding source
+
+Every bet on Scatter generates theoretical gross gaming revenue (theo GGR), calculated as the bet amount multiplied by the game's house edge. The revenue is split:
+
+* 5% accrues to the [Scatter Bankroll Vault](/protocol/scatter-bankroll-vault)
+* 95% is allocated to the SHFL buyback
+
+This split is enforced at the smart contract level on every bet and cannot be altered.
+
+### Buyback execution
+
+The buyback runs continuously and entirely on-chain:
+
+1. Buyback-allocated revenue accumulates in a treasury account, denominated in USDC.
+2. When the accumulator crosses a configurable threshold, a permissionless crank triggers a buyback.
+3. The buyback executes against the SHFL/USDC pool on Solana mainnet
+4. Execution is conditional on a TWAP check to ensure efficient pricing.
+5. The acquired SHFL is burned via `spl_token::burn`.
+
+Anyone can trigger the crank. There is no privileged operator and no manual intervention.
+
+### Verification
+
+Every buyback transaction is on-chain and independently verifiable.
+
+* Treasury balance is viewable on Solscan.
+* Buyback transactions appear in the DEX program logs.
+* Burns appear as SPL token supply changes on-chain.

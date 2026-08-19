@@ -1,0 +1,53 @@
+---
+title: "Scatter Bankroll Vault"
+description: "Learn how the community-owned Scatter bankroll works."
+---
+
+The Scatter Bankroll Vault is the community-owned bankroll for Scatter. Anyone can deposit Cash into the vault to take the opposite side of every bet placed on the platform. There is no separate house. The vault is the house.
+
+### SBV Token
+
+When you deposit Cash into the vault, you receive SBV, a standard SPL token representing your proportional share of the vault. SBV can be held in any Solana wallet, transferred, or used in other Solana protocols that support it.
+
+SBV is not a rebasing token. Your balance does not change. The exchange rate between SBV and Cash adjusts continuously based on the vault's net position.
+
+### Economic mechanics
+
+The vault is the counterparty to every bet on Scatter. When players lose, vault value increases. When players win, vault value decreases. Over time, vault returns converge toward the house edge across all bets on the platform.
+
+Of each bet's theoretical gross gaming revenue (theo GGR, calculated as bet amount × house edge):
+
+* 5% accrues to the vault as SBV appreciation
+* 95% is routed to the SHFL buyback (see [SHFL Token](/protocol/shfl-token))
+
+All depositors are pari passu. There are no preferred tranches, lockup tiers, or special terms.
+
+### Depositing
+
+1. Open the vault in the Scatter app and enter the amount of Cash to deposit.
+2. Confirm the transaction from your embedded wallet.
+3. SBV arrives in your wallet at the current exchange rate.
+
+Deposits are subject to a 1-day lock. During the lock, SBV cannot be redeemed or transferred. After the lock expires, the position is fully liquid.
+
+### Withdrawing
+
+To exit, burn SBV to redeem the proportional amount of Cash at the current exchange rate.
+
+The full vault is available for redemption at any time after the 1-day lock. There are no withdrawal queues, caps, or notice periods.
+
+### Risk
+
+[The vault absorbs the variance](/protocol/risks/bankroll-risk) of every bet on Scatter. Short-term PnL can be negative when players hit streaks. Over time, vault PnL is expected to track the house edge across all games, but returns are not guaranteed.
+
+<Warning>
+  SBV can decline in value, and vault returns are not guaranteed. Depositors should understand bankroll risk before depositing.
+</Warning>
+
+### Transparency
+
+* Vault TVL and current SBV exchange rate: viewable in the Scatter app
+* Per-game GGR and house edge: shown in the app, with full breakdowns per game
+* All bets settled against the vault: visible onchain
+
+---

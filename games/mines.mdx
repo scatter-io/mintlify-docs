@@ -1,0 +1,85 @@
+---
+title: "Mines"
+description: "Learn how Mines works on Scatter."
+---
+
+### Overview
+
+A 5×5 minefield with a configurable number of hidden mines. Reveal safe tiles to grow your multiplier, or hit a mine and lose the round. Play tile-by-tile and cash out whenever you like, or pre-pick a set of tiles and resolve in one shot.
+
+### How to play
+
+Mines has two modes: Manual and Auto.
+
+#### Manual mode
+
+1. Choose how many mines (1 to 24\) to hide across the 25-tile grid.
+2. Place your bet to start the round.
+3. Click tiles one at a time. Each safe tile reveals a gem and increases your multiplier. Hit a mine and the round ends with payout 0.
+4. Cash out at any time to collect your current multiplier. The round also auto-cashes out when all safe tiles are revealed.
+
+#### Auto mode
+
+1. Choose how many mines to hide.
+2. Toggle the tiles you want to reveal on the board.
+3. Start the autobet. The entire round resolves in a single transaction. If any picked tile is a mine, payout is 0. Otherwise, you receive the multiplier for the number of gems picked.
+
+### Rules and configuration
+
+* Board: 5 × 5, 25 tiles total.
+* Mines: 1 to 24 (default 3).
+* Gems: 25 minus the chosen mine count.
+
+### Payouts
+
+The payout multiplier is computed from the number of gems found and the chosen mine count:
+
+```
+win_chance % = C(25 − mines, gems) / C(25, gems) × 100
+multiplier   = (100 − edge) / win_chance %
+payout       = bet × multiplier
+```
+
+where `C(n, k)` is the number of ways to choose `k` items from `n`. A mine hit pays 0.
+
+Worked example: with 3 mines (the default) and 3 gems found, the win chance is `C(22, 3) / C(25, 3) × 100 = 66.96%`. At 1% edge, the multiplier is `99 / 66.96 = 1.479×`.
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: configured on-chain. In Manual mode, the client caps the next multiplier if continuing would push the payout past this limit.
+
+### Fairness
+
+Mines uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. The mechanism applies differently in Manual and Auto modes because the play patterns are different, but both modes share the same three inputs per VRF draw:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past round can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each VRF request.
+3. VRF output: a fresh on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) verifiable against its cryptographic proof.
+
+#### Manual mode
+
+Each tile reveal is its own VRF + seed commit-reveal. When you click a tile, the program makes a fresh VRF request and the tile's outcome is decided at that moment, bound to the current seeds and the conditional probability based on how many mines remain in the unrevealed tiles.
+
+There is no pre-committed mine layout. The unrevealed portion of the grid cannot be derived from previous reveals because each tile's randomness is independent. A final VRF call at cash out or round end resolves the positions of the remaining hidden tiles for display.
+
+#### Auto mode
+
+The full round resolves in a single VRF + seed commit-reveal. Your tile picks are committed in the start transaction along with the seeds, then a single VRF callback resolves the entire mine layout. The picked tiles are checked against the layout: if any are mines, the round pays 0, otherwise it pays at the gem-count multiplier.
+
+The mine layout is derived deterministically from the seeds (committed in the start transaction) and the VRF output (delivered in the callback). No party can predict or manipulate the layout: the seeds are fixed at submission and the VRF is independently verifiable.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Mines round exposes the VRF requests, proofs, and consumed outputs on-chain, along with the client seed and server seed for each VRF call, the tile indexes clicked or pre-picked, and the final grid state.
+
+* The Verify button on each round entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a round ID and reproduce the derivation. In Manual mode, this reproduces tile by tile; in Auto mode, the full round resolves in one step.
+* All artifacts are queryable directly on Solana mainnet.

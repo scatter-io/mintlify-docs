@@ -1,0 +1,49 @@
+---
+title: "Deposit"
+description: "Learn how deposits work on Scatter."
+---
+
+Scatter is non-custodial. Your funds live in an embedded wallet that you fully control, and there is no internal balance separate from that wallet. Depositing simply moves USDC into your wallet on Solana. You can fund it from any chain Scatter supports.
+
+### Before you deposit
+
+You need a Scatter account. When you sign up with email or a social login, an embedded wallet is created automatically and the signing keys are held by you, not Scatter. No KYC is required.
+
+### What you can deposit
+
+Scatter settles bets in USDC on Solana and SHFL on Solana. When you deposit from another asset or chain, the deposit modal routes and swaps to USDC on Solana automatically. USDC on Solana is shown as Cash on the platform.
+
+<Note>
+  The exact supported assets, routing path, network fee, and expected output are shown in the deposit modal before you send funds.
+</Note>
+
+| Chain | Address Type | Min Deposit | Example Tokens |
+| --- | --- | --- | --- |
+| Ethereum | EVM | $7 | ETH, USDC, USDT, WBTC, DAI, LINK, UNI, AAVE |
+| Polygon | EVM | $2 | POL, USDC, USDT, DAI, WETH, SAND |
+| Arbitrum | EVM | $2 | ETH, ARB, USDC, USDT, DAI, WBTC, USDe |
+| Base | EVM | $2 | ETH, USDC, USDT, DAI, cbBTC, AERO, USDS |
+| Optimism | EVM | $2 | ETH, OP, USDC, USDT, DAI, USDe |
+| BNB Smart Chain | EVM | $2 | BNB, USDC, USDT, DAI, ETH, BTCB, BUSD |
+| Solana | SVM | $2 | SOL, USDC, USDT, USDe, TRUMP |
+| Bitcoin | BTC | $9 | BTC |
+| Tron | TVM | $9 | USDT, TRX |
+| HyperEVM | EVM | $2 | HYPE, USDC, USDe, stHYPE, UBTC, UETH |
+| Abstract | EVM | $2 | ETH, USDC, USDT |
+| Monad | EVM | $2 | MON, USDC, USDT |
+| Ethereal | EVM | $2 | USDe, WUSDe |
+| Katana | EVM | $2 | AUSD |
+| Lighter | EVM | $2 | USDC |
+
+### Deposit timing
+
+* Solana: under 30 seconds
+* EVM chains: 1 to 3 minutes
+* Bitcoin: 10 to 30 minutes (2 confirmations)
+
+Once settled, Cash appears in your wallet and you can place bets immediately.
+
+### Fees and refunds
+
+* Network fees are deducted from the deposited amount. The modal shows the expected output before you send.
+* Failed swaps are refunded automatically to the source address. Refund timing varies by chain.

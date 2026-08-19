@@ -1,0 +1,82 @@
+---
+title: "Wheel"
+description: "Learn how Wheel works on Scatter."
+---
+
+### Overview
+
+A spinning prize wheel. Choose how many segments make up the wheel and how aggressive the payout distribution should be. One VRF-driven spin lands on a single segment and pays the multiplier mapped to that segment.
+
+### How to play
+
+1. Pick a segment count: 10, 20, 30, 40, or 50.
+2. Pick a risk level: Low, Medium, or High.
+3. Place your bet and spin. The wheel lands on one segment, and the segment's letter maps to a multiplier in the active table.
+
+### Rules and configuration
+
+* Segment counts: 10, 20, 30, 40, 50
+* Risk levels: Low, Medium, High
+* Segment letters: `ZERO`, `A`, `B`, `C`, `D`, `E`. A `ZERO` segment pays 0×.
+
+The set of letters that appears on the wheel depends on the (risk, segments) combination:
+
+* Low Risk: uses `ZERO`, `A`, `B` for every segment count. Many small wins distributed across the wheel.
+* Medium Risk: uses `ZERO`, `A`, `B`, `C`, `D` for 10, 20, 40, and 50 segments. The 30-segment variant additionally uses letter `E`. Wider spread of multipliers.
+* High Risk: uses only `ZERO` and `A`, with a single `A` segment and the rest `ZERO`. The chance of hitting `A` is `1 / segment count`. Mostly losses with one rare large hit.
+
+### Payouts
+
+Each combination of segment count, risk level, and house edge has its own multiplier table. The full tables are visible in the game UI.
+
+Examples at 1% edge:
+
+10 segments
+
+| Risk | Letter to multiplier |
+| ----- | ----- |
+| Low | `ZERO: 0`, `A: 1.2`, `B: 1.5` |
+| Medium | `ZERO: 0`, `A: 1.5`, `B: 1.9`, `C: 2`, `D: 3` |
+| High | `ZERO: 0`, `A: 9.9` |
+
+High Risk `A` multiplier by segment count (1% edge)
+
+| Segments | A multiplier |
+| ----- | ----- |
+| 10 | 9.9× |
+| 20 | 19.8× |
+| 30 | 29.7× |
+| 40 | 39.6× |
+| 50 | 49.5× |
+
+The single `A` segment on the High Risk wheel scales linearly with segment count, preserving the expected return while concentrating payout into a single rare hit. The maximum achievable multiplier across all configurations is 49.5× (50 segments, High Risk).
+
+### House edge
+
+The house edge is 1%.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum payout: bounded by the largest multiplier in the active table. The maximum reachable multiplier across all configurations is 49.5×.
+
+### Fairness
+
+Wheel uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each spin incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past spin can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The VRF output is reduced to an integer in `[0, segments − 1]`. That index maps to a letter via the segment pattern for your chosen (risk, segments) configuration, and the letter maps to a multiplier in the active table.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Wheel spin exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, segment count, risk level, landed segment, and resolved multiplier.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a spin ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

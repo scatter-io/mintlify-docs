@@ -1,0 +1,16 @@
+.nav-logo,
+nav-logo img {
+  height: 54px !important;
+  width: auto !important;
+}
+
+.sidebar-group-header {
+  margin-bottom: 0.25rem !important;
+}
+
+a.group.flex.items-start,
+button.group.flex.items-start {
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  line-height: 1.25rem !important;
+}

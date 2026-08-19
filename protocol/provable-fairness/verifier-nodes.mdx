@@ -1,0 +1,36 @@
+---
+title: "Verifier Nodes"
+description: "Learn how verifier nodes validate Scatter rollup state."
+---
+
+Verifier nodes are independent nodes that observe and validate the state produced by the [Ephemeral Rollup](/protocol/game-engine) leaders. Anyone can run one. They are not part of the leader set: they do not produce state, they verify it.
+
+### What a verifier node does
+
+A verifier node connects to the Ephemeral Rollup, receives the same transaction stream as the leaders, and recomputes the resulting state independently. It then compares the state it derived against the state the leaders committed to Solana mainnet.
+
+If the two match, the leader is behaving correctly. If they diverge, the verifier has detected an invalid state commit and can raise it for review.
+
+### Role in provable fairness
+
+Scatter's provable fairness model has two layers: the [VRF](/protocol/provable-fairness/verifiable-randomness) that produces randomness, and the game logic that turns that randomness into a bet outcome. The VRF proof is verified on-chain by MagicBlock's VRF program. The game logic is executed by the rollup leader.
+
+Verifier nodes close the loop on the second layer. By independently re-executing every game transaction, they confirm that the leader applied each VRF output correctly and produced the right outcome. Combined with on-chain VRF verification, this gives end-to-end fairness that does not rely on trusting the leader.
+
+See Provable Fairness for the broader verification model.
+
+### Why they exist
+
+Verifier nodes are the trust-minimization layer for Scatter's rollup infrastructure. Without them, the integrity of the rollup depends entirely on the leaders behaving honestly. With independent verifiers monitoring the same activity in real time, dishonest behavior becomes immediately detectable.
+
+The more verifiers running, the stronger the guarantee.
+
+### Who can run one
+
+Anyone can run a verifier node. There are no permissions, allowlists, or staking requirements. Players, vault depositors, third-party developers, and outside observers are all encouraged to run their own.
+
+### Setup
+
+<Info>
+  Detailed setup instructions, hardware requirements, and operational guidance are coming soon.
+</Info>

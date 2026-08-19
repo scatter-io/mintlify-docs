@@ -1,0 +1,30 @@
+---
+title: "Provable Fairness"
+description: "Learn how Scatter makes every bet independently verifiable."
+---
+
+Every bet placed on Scatter resolves through a randomness primitive that is verifiable on-chain by anyone. There is no off-chain server choosing outcomes, and no need to trust Scatter to play fair. The result of every bet is mathematically bound to a publicly verifiable input.
+
+Scatter combines three primitives to achieve this:
+
+* [Verifiable Random Function](/protocol/provable-fairness/verifiable-randomness) (VRF) as the randomness source.
+* [Seed commit-reveal](/protocol/provable-fairness/verifiable-randomness) as the binding mechanism used by every game.
+* [State commit-reveal](/protocol/provable-fairness/verifiable-randomness) as an additional mechanism used by Blackjack to hide game state during play.
+
+### Verifying outcomes yourself
+
+Every bet on Scatter exposes the full inputs needed for independent verification.
+
+* Inline Verify button: Each entry in your bet history has a Verify button that re-derives the outcome from the published inputs and confirms it matches the result you received.
+* Verify page: The `/verify` page lets you paste a bet ID and reproduce the derivation.
+* On-chain artifacts: All verification inputs are stored on Solana mainnet and queryable via standard RPC, so any party can verify outcomes independently of Scatter.
+
+The on-chain artifacts for a bet include:
+
+* The VRF request and proof
+* The VRF output that was consumed
+* The client seed and server seed (with prior seeds revealed once rotated)
+* Any commit-reveal hashes and revealed state (Blackjack)
+* The bet parameters (game, stake, configuration)
+
+These artifacts are sufficient to reproduce any outcome from scratch.

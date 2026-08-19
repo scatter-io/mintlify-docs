@@ -1,0 +1,78 @@
+---
+title: "Advanced Dice"
+description: "Learn how Advanced Dice works on Scatter."
+---
+
+### Overview
+
+Advanced Dice extends classic Dice with richer bet shapes. Instead of betting on a single threshold, you choose one of three roll modes and configure either a single range or two disjoint ranges as your winning region.
+
+### How to play
+
+1. Choose a roll mode: Inside, Outside, or Between Two.
+2. Drag the slider handles to set your bounds.
+3. Place your bet.
+
+A single random draw produces an integer between 0 and 10000. The display scale is 0.00 to 100.00. Whether you win is determined by checking the result against your chosen bounds.
+
+### Rules and configuration
+
+There are three roll modes:
+
+* Inside: You set a single range `[lower, upper]`. You win if the result is strictly inside that range (`result > lower` and `result < upper`).
+* Outside: You set a single range `[lower, upper]`. You win if the result is strictly outside that range (`result < lower` or `result > upper`). Each side of the range must contain at least one winning spot.
+* Between Two: You set two non-overlapping ranges. You win if the result is strictly inside either range.
+
+Bounds are strict at both ends in all modes. The minimum win range is 1, ensuring at least one winning spot. The maximum win range depends on the house edge: as edge increases, the maximum win range decreases.
+
+The minimum win chance is 0.01%. The maximum win chance at a 1% edge is 98%, dropping with higher edges.
+
+### Payouts
+
+Win chance and payout multiplier are computed as follows:
+
+```
+win_chance = (win_range / 10001) × 100
+multiplier = (100 - edge) / win_chance
+payout     = bet × multiplier
+```
+
+The `win_range` per mode:
+
+* Inside: `upper - lower - 1`
+* Outside: `lower + (10000 - upper)`
+* Between Two: sum of the two inside ranges, computed the same way as Inside for each
+
+If win chance is 0 (no winning spots possible), the configuration is rejected before the bet is placed.
+
+### House edge
+
+Advanced Dice supports five fixed edge levels: 1%, 2%, 3%, 4%, 8%. The active edge is read from the game config on-chain and applies to all roll modes.
+
+A higher edge reduces the maximum achievable win chance, which in turn reduces the highest multipliers available.
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Multiplier cap: there is no explicit payout cap. The multiplier scales inversely with win chance up to the limit imposed by the edge and the minimum win chance.
+
+### Fairness
+
+Advanced Dice uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The roll is derived deterministically from these inputs. The VRF guarantees the randomness was honestly generated. The seed commit-reveal guarantees the result was not manipulated by either party after the fact.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Advanced Dice bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, roll type, and bounds.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

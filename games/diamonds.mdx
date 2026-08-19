@@ -1,0 +1,87 @@
+---
+title: "Diamonds"
+description: "Learn how Diamonds works on Scatter."
+---
+
+### Overview
+
+A five-slot gem reveal. Each slot rolls one of seven gems independently, and you are paid based on the strongest matching pattern formed across the five slots, poker-hand style.
+
+### How to play
+
+1. Place your bet. No other configuration is required.
+2. Five slots each reveal one of seven gems.
+3. You are paid by the best matching pattern across the five slots.
+
+### Rules and configuration
+
+* Slots: 5
+* Gems per slot: 7 (each slot rolls independently)
+* Total outcome space: 7^5 = 16,807 distinct results
+* Patterns (low to high): No match, Pair, Two Pair, Three of a Kind, Full House, Four of a Kind, Five of a Kind
+
+### Payouts
+
+Pattern multipliers vary by house edge:
+
+| Pattern | 1% edge | 2% edge | 3% edge | 4% edge | 8% edge |
+| ----- | ----- | ----- | ----- | ----- | ----- |
+| No match | 0× | 0× | 0× | 0× | 0× |
+| Pair | 0.1× | 0.1× | 0.1× | 0.1× | 0.1× |
+| Two Pair | 2× | 2× | 2× | 2× | 2× |
+| Three of a Kind | 3× | 3× | 3× | 3× | 2.8× |
+| Full House | 4.3× | 4× | 3.7× | 3.4× | 3.2× |
+| Four of a Kind | 5× | 4.8× | 4.6× | 4.4× | 3.6× |
+| Five of a Kind | 50× | 50× | 50× | 50× | 50× |
+
+A Pair pays 0.1×, meaning you receive back 10% of your stake. Two Pair (2×) is the lowest pattern that returns more than the original stake.
+
+Outcome probabilities (uniform over 16,807 results):
+
+| Pattern | Combinations | Probability |
+| ----- | ----- | ----- |
+| No match | 2,520 | 14.99% |
+| Pair | 8,400 | 49.98% |
+| Two Pair | 3,150 | 18.74% |
+| Three of a Kind | 2,100 | 12.49% |
+| Full House | 420 | 2.50% |
+| Four of a Kind | 210 | 1.25% |
+| Five of a Kind | 7 | 0.04% |
+
+### House edge
+
+Selectable from 1%, 2%, 3%, 4%, 8%. Each edge has its own multiplier preset:
+
+| Edge | RTP |
+| ----- | ----- |
+| 1% | 99.04% |
+| 2% | 98.04% |
+| 3% | 97.04% |
+| 4% | 96.04% |
+| 8% | 92.04% |
+
+### Limits
+
+* Maximum bet: $50,000 per wager, platform-wide cap.
+* Minimum bet: configured on-chain per game.
+* Maximum multiplier: 50× (Five of a Kind, at any edge level).
+
+### Fairness
+
+Diamonds uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+
+1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
+3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The five gem indices are derived deterministically from these inputs, then classified against the pattern table. The VRF guarantees the randomness was honestly generated. The seed commit-reveal guarantees the result was not manipulated after the fact.
+
+See [Provable Fairness](/protocol/provable-fairness/overview) for the broader model.
+
+### Verification
+
+Every Diamonds bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, and the five revealed gem indices.
+
+* The Verify button on each bet entry re-derives the outcome from these inputs.
+* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+* All artifacts are queryable directly on Solana mainnet.

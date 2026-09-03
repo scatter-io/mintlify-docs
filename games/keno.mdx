@@ -16,26 +16,26 @@ A 40-tile keno variant. Pick up to 10 tiles, 10 tiles are drawn without replacem
 
 ### Rules and configuration
 
-* Total tiles: 40
-* Selectable picks: 1 to 10
-* Tiles drawn per round: 10 (sampled without replacement)
-* Risk levels: Classic, Low Risk, Medium Risk, High Risk
+- Total tiles: 40
+- Selectable picks: 1 to 10
+- Tiles drawn per round: 10 (sampled without replacement)
+- Risk levels: Classic, Low Risk, Medium Risk, High Risk
 
 Risk profiles:
 
-* Classic: pays small wins at lower hit counts with a moderate top end.
-* Low Risk: pays slightly more often at low and mid hit counts, with smaller mid-tier multipliers and a high top end.
-* Medium Risk: drops the lowest hits to 0 and shifts payout weight toward higher hit counts.
-* High Risk: pays 0 for partial hits and rewards aggressively only as your hits approach your picks.
+- Classic: pays small wins at lower hit counts with a moderate top end.
+- Low Risk: pays slightly more often at low and mid hit counts, with smaller mid-tier multipliers and a high top end.
+- Medium Risk: drops the lowest hits to 0 and shifts payout weight toward higher hit counts.
+- High Risk: pays 0 for partial hits and rewards aggressively only as your hits approach your picks.
 
 ### Payouts
 
-Payout multipliers are looked up by `(picks, risk, hits)`. There is one row per pick count (1 through 10\) and an entry for each possible hit count (0 through picks). The full tables for every pick count are visible in the game UI.
+Payout multipliers are looked up by `(picks, risk, hits)`. There is one row per pick count (1 through 10) and an entry for each possible hit count (0 through picks). The full tables for every pick count are visible in the game UI.
 
 Example: Pick 10
 
 | hits | Classic | Low Risk | Medium Risk | High Risk |
-| ----- | ----- | ----- | ----- | ----- |
+| --- | --- | --- | --- | --- |
 | 0 | 0 | 0 | 0 | 0 |
 | 1 | 0 | 0 | 0 | 0 |
 | 2 | 0 | 1.1 | 0 | 0 |
@@ -52,13 +52,13 @@ The top-end multipliers at 10-of-10 hits reach 1000× for Low / Medium / High Ri
 
 ### House edge
 
-The house edge is 1%.
+The house edge is 2%.
 
 ### Limits
 
-* Maximum bet: $50,000 per wager, platform-wide cap.
-* Minimum bet: configured on-chain per game.
-* Maximum payout: bounded by the highest entry in the payout table. For Pick 10 across Low / Medium / High Risk, this is 1000×.
+- Maximum bet: \$50,000 per wager, platform-wide cap.
+- Minimum bet: configured on-chain per game.
+- Maximum payout: bounded by the highest entry in the payout table. For Pick 10 across Low / Medium / High Risk, this is 1000×.
 
 ### Fairness
 
@@ -76,9 +76,9 @@ See [Provable Fairness](/protocol/provable-fairness/overview) for the broader mo
 
 Every Keno bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, your selections, the drawn tiles, and the resolved multiplier.
 
-* The Verify button on each bet entry re-derives the outcome from these inputs.
-* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
-* All artifacts are queryable directly on Solana mainnet.
+- The Verify button on each bet entry re-derives the outcome from these inputs.
+- The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+- All artifacts are queryable directly on Solana mainnet.
 
 Locked. Here's Limbo:
 

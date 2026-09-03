@@ -7,12 +7,9 @@ A portion of every bet placed on Scatter is used to programmatically buy SHFL on
 
 ### Funding source
 
-Every bet on Scatter generates theoretical gaming revenue, calculated as the bet amount multiplied by the game's house edge. The revenue is split depending on the players level and if the player is on a referral. Up to 70% of the players edge is returned to them. The remaining revenue is split between:
+Every bet on Scatter generates theoretical gaming revenue, calculated as the bet amount multiplied by the game's house edge. The revenue is split depending on the players level and if the player is on a referral. Up to 65% of the players edge is returned to them. 10% of edge is routed to the [Scatter Bankroll](/protocol/scatter-bankroll-vault). All remaining revenue is used to programmatically buyback and burn the SHFL token.
 
-- 10% to the [Scatter Bankroll](/protocol/scatter-bankroll-vault)
-- All remaining revenue towards the SHFL buyback.
-
-This split is enforced at the smart contract level on every bet and cannot be altered.
+This buyback is enforced at the smart contract level on every bet and cannot be altered.
 
 ### Buyback execution
 
@@ -33,3 +30,7 @@ Every buyback transaction is on-chain and independently verifiable.
 - Treasury balance is viewable on Solscan.
 - Buyback transactions appear in the DEX program logs.
 - Burns appear as SPL token supply changes on-chain.
+
+## SHFL Wagering
+
+SHFL is a wager asset on Scatter. Bets with SHFL do not interact with the Bankroll Vault and instead are wagered against Scatter's SHFL treasury. All revenue derived from SHFL wagering is burnt on a monthly basis by the protocol. 

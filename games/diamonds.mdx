@@ -15,17 +15,17 @@ A five-slot gem reveal. Each slot rolls one of seven gems independently, and you
 
 ### Rules and configuration
 
-* Slots: 5
-* Gems per slot: 7 (each slot rolls independently)
-* Total outcome space: 7^5 = 16,807 distinct results
-* Patterns (low to high): No match, Pair, Two Pair, Three of a Kind, Full House, Four of a Kind, Five of a Kind
+- Slots: 5
+- Gems per slot: 7 (each slot rolls independently)
+- Total outcome space: 7^5 = 16,807 distinct results
+- Patterns (low to high): No match, Pair, Two Pair, Three of a Kind, Full House, Four of a Kind, Five of a Kind
 
 ### Payouts
 
 Pattern multipliers vary by house edge:
 
 | Pattern | 1% edge | 2% edge | 3% edge | 4% edge | 8% edge |
-| ----- | ----- | ----- | ----- | ----- | ----- |
+| --- | --- | --- | --- | --- | --- |
 | No match | 0× | 0× | 0× | 0× | 0× |
 | Pair | 0.1× | 0.1× | 0.1× | 0.1× | 0.1× |
 | Two Pair | 2× | 2× | 2× | 2× | 2× |
@@ -39,7 +39,7 @@ A Pair pays 0.1×, meaning you receive back 10% of your stake. Two Pair (2×) is
 Outcome probabilities (uniform over 16,807 results):
 
 | Pattern | Combinations | Probability |
-| ----- | ----- | ----- |
+| --- | --- | --- |
 | No match | 2,520 | 14.99% |
 | Pair | 8,400 | 49.98% |
 | Two Pair | 3,150 | 18.74% |
@@ -50,21 +50,13 @@ Outcome probabilities (uniform over 16,807 results):
 
 ### House edge
 
-Selectable from 1%, 2%, 3%, 4%, 8%. Each edge has its own multiplier preset:
-
-| Edge | RTP |
-| ----- | ----- |
-| 1% | 99.04% |
-| 2% | 98.04% |
-| 3% | 97.04% |
-| 4% | 96.04% |
-| 8% | 92.04% |
+The house edge is 1%.
 
 ### Limits
 
-* Maximum bet: $50,000 per wager, platform-wide cap.
-* Minimum bet: configured on-chain per game.
-* Maximum multiplier: 50× (Five of a Kind, at any edge level).
+- Maximum bet: \$50,000 per wager, platform-wide cap.
+- Minimum bet: configured on-chain per game.
+- Maximum multiplier: 50× (Five of a Kind, at any edge level).
 
 ### Fairness
 
@@ -82,6 +74,6 @@ See [Provable Fairness](/protocol/provable-fairness/overview) for the broader mo
 
 Every Diamonds bet exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, and the five revealed gem indices.
 
-* The Verify button on each bet entry re-derives the outcome from these inputs.
-* The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
-* All artifacts are queryable directly on Solana mainnet.
+- The Verify button on each bet entry re-derives the outcome from these inputs.
+- The `/verify` page lets you paste a bet ID and reproduce the derivation end to end.
+- All artifacts are queryable directly on Solana mainnet.

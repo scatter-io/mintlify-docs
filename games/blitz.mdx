@@ -12,22 +12,22 @@ Pick a target number of unique cards. The deck flips cards one at a time. If you
 1. Choose a target between 5 and 36 unique cards.
 2. Place your bet.
 3. Cards are drawn one at a time from a 52-card pool with replacement. The round ends when either:
-   * Your target number of unique cards is reached (you win at the target's multiplier), or
-   * A duplicate card appears (the round loses with payout 0).
+   - Your target number of unique cards is reached (you win at the target's multiplier), or
+   - A duplicate card appears (the round loses with payout 0).
 
 ### Rules and configuration
 
-* Card pool: 52 cards.
-* Sampling: with replacement. Each draw is an independent uniform sample from the 52-card pool.
-* Target range: 5 to 36 unique cards.
-* Round end: hitting your target (win) or any duplicate appearing (loss).
+- Card pool: 52 cards.
+- Sampling: with replacement. Each draw is an independent uniform sample from the 52-card pool.
+- Target range: 5 to 36 unique cards.
+- Round end: hitting your target (win) or any duplicate appearing (loss).
 
 ### Payouts
 
 The payout multiplier is fixed per target and scales with the difficulty of the streak. At 2% edge:
 
 | Target | Multiplier |
-| ----- | ----- |
+| --- | --- |
 | 5 | 1.19× |
 | 6 | 1.32× |
 | 7 | 1.49× |
@@ -65,13 +65,13 @@ A losing round (duplicate before target) pays 0. The maximum reachable multiplie
 
 ### House edge
 
-The house edge is 2%.
+The house edge is 1%.
 
 ### Limits
 
-* Maximum bet: $50,000 per wager, platform-wide cap.
-* Minimum bet: configured on-chain per game.
-* Maximum payout: configured on-chain. Bounded structurally by the largest multiplier (15,181,603.62× at target 36).
+- Maximum bet: \$50,000 per wager, platform-wide cap.
+- Minimum bet: configured on-chain per game.
+- Maximum payout: configured on-chain. Bounded structurally by the largest multiplier (15,181,603.62× at target 36).
 
 ### Fairness
 
@@ -89,6 +89,6 @@ See [Provable Fairness](/protocol/provable-fairness/overview) for the broader mo
 
 Every Blitz round exposes the VRF request, proof, and consumed output on-chain, along with the client seed, server seed, target, and the full sequence of cards drawn.
 
-* The Verify button on each round entry re-derives the outcome from these inputs.
-* The `/verify` page lets you paste a round ID and reproduce the derivation card by card.
-* All artifacts are queryable directly on Solana mainnet.
+- The Verify button on each round entry re-derives the outcome from these inputs.
+- The `/verify` page lets you paste a round ID and reproduce the derivation card by card.
+- All artifacts are queryable directly on Solana mainnet.

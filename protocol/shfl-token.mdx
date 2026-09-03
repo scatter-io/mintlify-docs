@@ -7,10 +7,10 @@ A portion of every bet placed on Scatter is used to programmatically buy SHFL on
 
 ### Funding source
 
-Every bet on Scatter generates theoretical gross gaming revenue (theo GGR), calculated as the bet amount multiplied by the game's house edge. The revenue is split:
+Every bet on Scatter generates theoretical gaming revenue, calculated as the bet amount multiplied by the game's house edge. The revenue is split depending on the players level and if the player is on a referral. Up to 70% of the players edge is returned to them. The remaining revenue is split between:
 
-* 5% accrues to the [Scatter Bankroll Vault](/protocol/scatter-bankroll-vault)
-* 95% is allocated to the SHFL buyback
+- 10% to the [Scatter Bankroll](/protocol/scatter-bankroll-vault)
+- All remaining revenue towards the SHFL buyback.
 
 This split is enforced at the smart contract level on every bet and cannot be altered.
 
@@ -30,6 +30,6 @@ Anyone can trigger the crank. There is no privileged operator and no manual inte
 
 Every buyback transaction is on-chain and independently verifiable.
 
-* Treasury balance is viewable on Solscan.
-* Buyback transactions appear in the DEX program logs.
-* Burns appear as SPL token supply changes on-chain.
+- Treasury balance is viewable on Solscan.
+- Buyback transactions appear in the DEX program logs.
+- Burns appear as SPL token supply changes on-chain.

@@ -100,18 +100,6 @@
             ]
           }
         ]
-      },
-      {
-        "tab": "API Reference",
-        "icon": "square-terminal",
-        "groups": [
-          {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          }
-        ]
       }
     ],
     "global": {

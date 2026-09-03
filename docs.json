@@ -148,9 +148,7 @@
   "contextual": {
     "options": [
       "chatgpt",
-      "claude",
-      "mcp",
-      "add-mcp"
+      "claude"
     ]
   },
   "footer": {

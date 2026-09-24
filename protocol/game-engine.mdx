@@ -35,7 +35,7 @@ The VRF inputs and proofs for every bet are stored on-chain alongside the bet it
 
 ### Commit-reveal for hidden-state games
 
-Some game formats need hidden state during play. In blackjack the dealer's hole card is concealed until the player acts. In mines the bomb positions are fixed at the start of the round but only revealed as the player picks tiles.
+Some game formats need hidden state during play. In blackjack the dealer's hole card is concealed until the player acts.
 
 Scatter solves this on a public chain using a commit-reveal scheme:
 
@@ -44,6 +44,8 @@ Scatter solves this on a public chain using a commit-reveal scheme:
 3. Reveal: At the end of the round, the underlying state is revealed on-chain. Anyone can verify the revealed state matches the original commitment.
 
 The result is fixed at the moment the bet is placed, even though the player cannot see it during play.
+
+Mines handles randomness differently depending on the mode. In Manual mode, each tile reveal uses a fresh VRF request to determine its outcome. There is no pre-committed mine layout; the remaining tiles are resolved for display when the round ends. In Auto mode, your tile selections are committed first, then a single VRF callback generates the layout and resolves the round.
 
 ### Bet flow
 

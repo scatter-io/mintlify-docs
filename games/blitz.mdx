@@ -9,7 +9,7 @@ Pick a target number of unique cards. The deck flips cards one at a time. If you
 
 ### How to play
 
-1. Choose a target between 5 and 36 unique cards.
+1. Choose a target between 5 and 35 unique cards.
 2. Place your bet.
 3. Cards are drawn one at a time from a 52-card pool with replacement. The round ends when either:
    - Your target number of unique cards is reached (you win at the target's multiplier), or
@@ -19,49 +19,48 @@ Pick a target number of unique cards. The deck flips cards one at a time. If you
 
 - Card pool: 52 cards.
 - Sampling: with replacement. Each draw is an independent uniform sample from the 52-card pool.
-- Target range: 5 to 36 unique cards.
+- Target range: 5 to 35 unique cards.
 - Round end: hitting your target (win) or any duplicate appearing (loss).
 
 ### Payouts
 
-The payout multiplier is fixed per target and scales with the difficulty of the streak. At 2% edge:
+The payout multiplier depends on your target. At a 1% house edge, the multipliers are:
 
 | Target | Multiplier |
 | --- | --- |
-| 5 | 1.19× |
-| 6 | 1.32× |
-| 7 | 1.49× |
-| 8 | 1.73× |
-| 9 | 2.04× |
-| 10 | 2.47× |
-| 11 | 3.06× |
-| 12 | 3.87× |
-| 13 | 5.04× |
-| 14 | 6.72× |
-| 15 | 9.19× |
-| 16 | 12.92× |
-| 17 | 18.66× |
-| 18 | 27.72× |
-| 19 | 42.40× |
-| 20 | 66.81× |
-| 21 | 108.56× |
-| 22 | 182.10× |
-| 23 | 315.64× |
-| 24 | 565.98× |
-| 25 | 1,051.10× |
-| 26 | 2,024.34× |
-| 27 | 4,048.68× |
-| 28 | 8,421.26× |
-| 29 | 18,246.06× |
-| 30 | 41,251.96× |
-| 31 | 97,504.63× |
-| 32 | 241,440.04× |
-| 33 | 627,744.11× |
-| 34 | 1,718,036.50× |
-| 35 | 4,963,216.57× |
-| 36 | 15,181,603.62× |
+| 5 | 1.2068× |
+| 6 | 1.3352× |
+| 7 | 1.5094× |
+| 8 | 1.7442× |
+| 9 | 2.0614× |
+| 10 | 2.4928× |
+| 11 | 3.0864× |
+| 12 | 3.9144× |
+| 13 | 5.0887× |
+| 14 | 6.7850× |
+| 15 | 9.2848× |
+| 16 | 13.0489× |
+| 17 | 18.8484× |
+| 18 | 28.0034× |
+| 19 | 42.8288× |
+| 20 | 67.4878× |
+| 21 | 109.6677× |
+| 22 | 183.9587× |
+| 23 | 318.8618× |
+| 24 | 571.7522× |
+| 25 | 1,061.8255× |
+| 26 | 2,044.9974× |
+| 27 | 4,089.9948× |
+| 28 | 8,507.1892× |
+| 29 | 18,432.2433× |
+| 30 | 41,672.8980× |
+| 31 | 98,499.5772× |
+| 32 | 243,903.7151× |
+| 33 | 634,149.6594× |
+| 34 | 1,735,567.4889× |
+| 35 | 5,013,861.6348× |
 
-A losing round (duplicate before target) pays 0. The maximum reachable multiplier is 15,181,603.62× at a target of 36.
+Multipliers include your original stake. A losing round pays zero. The highest multiplier for targets from 5 to 35 is 5,013,861.6348× at a target of 35.
 
 ### House edge
 
@@ -71,7 +70,7 @@ The house edge is 1%.
 
 - Maximum bet: \$50,000 per wager, platform-wide cap.
 - Minimum bet: configured on-chain per game.
-- Maximum payout: configured on-chain. Bounded structurally by the largest multiplier (15,181,603.62× at target 36).
+- Maximum payout: configured on-chain. The largest multiplier for targets from 5 to 35 is 5,013,861.6348× at target 35.
 
 ### Fairness
 

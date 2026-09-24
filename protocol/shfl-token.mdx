@@ -34,3 +34,31 @@ Every buyback transaction is on-chain and independently verifiable.
 ## SHFL Wagering
 
 SHFL is a wager asset on Scatter. Bets with SHFL do not interact with the Bankroll Vault and instead are wagered against Scatter's SHFL treasury. All revenue derived from SHFL wagering is burnt on a monthly basis by the protocol. 
+
+```mermaid
+flowchart TB
+    subgraph USDC["USDC gameplay"]
+        direction TB
+        A["USDC revenue"] --> B["Pay bonuses + affiliate rewards"]
+        B --> C["Remaining USDC revenue"]
+        C --> D["90% buys SHFL"]
+        C --> E["10% funds vault rewards<br/>Scatter Bankroll Vault"]
+    end
+
+    subgraph SHFL["SHFL gameplay"]
+        direction TB
+        F["SHFL revenue"] --> G["Pay bonuses + affiliate rewards"]
+        G --> H["Remaining SHFL revenue"]
+        H --> J["100% goes to burn"]
+    end
+
+    D --> I["SHFL burned<br/>Permanently removed from supply"]
+    J --> I
+
+    classDef revenue fill:#e8efff,stroke:#5479ce,color:#20365b
+    classDef rewards fill:#fff2d9,stroke:#c89533,color:#5b4218
+    classDef burn fill:#e3f5e9,stroke:#27945b,color:#153c27
+    class A,C,F,H revenue
+    class B,E,G rewards
+    class D,J,I burn
+```

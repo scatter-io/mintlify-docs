@@ -33,7 +33,7 @@ Scatter does not operate the rollup. The rollup is operated by MagicBlock, an in
 * Mainnet settlement: Every bet, deposit, and withdrawal settles to Solana mainnet, where it is fully verifiable on-chain.
 * Provably fair derivation: Scatter's verification system lets any player re-derive the outcome of their bets from on-chain inputs, independent of the rollup.
 * Redundant leaders: Each rollup runs with redundant leaders. If one leader becomes unavailable or fails, another takes over without interrupting play. This reduces reliance on any single leader and improves system availability if one or more nodes go down.
-* Regional redundancy: Scatter operates rollups in multiple regions (AS, EU, US). If one region degrades, traffic can be routed to another.
+* Regional redundancy: Scatter uses MagicBlock Ephemeral Rollups in multiple regions (AS, EU, US). If one region degrades, traffic can be routed to another.
 * Verifier nodes: Anyone can run a verifier node that watches Ephemeral Rollup activity and independently validates state transitions. Players, depositors, and third parties are encouraged to run their own to monitor the rollup directly.
 * Multi-sig and timelock controls: Configuration changes to Scatter's smart contracts require multi-sig approval and a timelock delay, limiting the blast radius of any single operator's actions.
 

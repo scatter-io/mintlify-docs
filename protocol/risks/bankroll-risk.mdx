@@ -13,7 +13,7 @@ The vault loses money when players win. Specifically:
 * If a player hits a high-multiplier outcome the loss for the vault on that single bet can be substantial.
 * If many players run good in a short window, multiple losses compound before variance offsets them
 
-SBV value tracks vault NAV continuously. When the vault is in drawdown, SBV value is below its prior high.
+SLP value tracks vault NAV continuously. When the vault is in drawdown, SLP value is below its prior high.
 
 ### Variance and the law of large numbers
 
@@ -35,7 +35,7 @@ A "bad run" is any sustained period where realized PnL is below expectation. Exa
 * A long run of player-favorable variance with no offsetting house wins.
 * A single bet at the maximum size resolving against the vault on a high-volatility game.
 
-During a bad run, SBV value declines and stays below its prior high until edge accrual catches up. Recovery time depends on play volume, game mix, and how deep the drawdown went.
+During a bad run, SLP value declines and stays below its prior high until edge accrual catches up. Recovery time depends on play volume, game mix, and how deep the drawdown went.
 
 ### Mitigations
 
@@ -46,7 +46,7 @@ During a bad run, SBV value declines and stays below its prior high until edge a
 ### What depositors should know
 
 * The vault can lose money over arbitrary periods.
-* SBV value can fall below the value at which you deposited.
+* SLP value can fall below the value at which you deposited.
 * The 1-day deposit lock means you cannot exit the vault during the lock window, including during a drawdown.
 * Returns are not guaranteed.
 * Past edge accrual is not predictive of future edge accrual.

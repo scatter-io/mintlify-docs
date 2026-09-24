@@ -27,6 +27,12 @@ All depositors are equal. There are no preferred tranches, lockup tiers, or spec
 
 Deposits are subject to a 1-day lock. During the lock, you are unable to redeem or transfer. After the lock expires, the position is fully liquid.
 
+### Epochs
+
+Scatter processes SLP deposits and withdrawals in batches called **epochs**. While an epoch is open, your request joins the batch. After the scheduled window ends and the required game settlements complete, the epoch closes and fixes the pricing used to convert between USDC and SLP. The batch is then finalized and the next epoch opens. Your final amount may differ from the estimate shown when you submitted your request, and processing may continue after the countdown reaches zero. Submitted requests cannot be cancelled.
+
+For deposits, newly minted SLP enters a **deposit lockup that starts when the epoch finalizes**. Once the lockup ends, that SLP becomes eligible for a withdrawal request, which is processed in an open epoch. Adding a later deposit can extend the hold on SLP that is still locked if the balances are combined. Withdrawals have no additional deposit lockup: after their epoch finalizes and collection completes, the USDC proceeds appear in your Scatter balance. Check the app for current epoch timing and lockup information.
+
 ### Withdrawing
 
 To exit, burn SLP to redeem the proportional amount of Cash at the current exchange rate.

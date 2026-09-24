@@ -87,6 +87,8 @@ The house edge is 0.57%
 
 Blackjack uses Scatter's most complete provable fairness flow because the dealer's hole card needs to be fixed at the start of the round but hidden until you have finished acting. The protocol combines on-chain [VRF](/protocol/provable-fairness/verifiable-randomness) randomness with a cryptographic commit-reveal of the dealer's hole card.
 
+Before betting, your app receives the active server seed and a signed authorization tied to your wallet and an expiry. The game program verifies this authorization when processing the transaction. This server seed is available before the bet resolves; knowing the seeds alone does not reveal the future VRF output. The dealer’s hidden-card commitment uses a separate secret.
+
 #### How the hole card is bound
 
 1. Commit: At the start of the round, Scatter generates a secret and publishes a SHA-256 hash of it on-chain. The hash becomes the binding commitment.

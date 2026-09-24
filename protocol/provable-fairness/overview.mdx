@@ -8,8 +8,16 @@ Every bet placed on Scatter resolves through a randomness primitive that is veri
 Scatter combines three primitives to achieve this:
 
 - [Verifiable Random Function](/protocol/provable-fairness/verifiable-randomness) (VRF) as the randomness source.
-- [Seed commit-reveal](/protocol/provable-fairness/verifiable-randomness) as the binding mechanism used by every game.
+- [Server-seed authorization](/protocol/provable-fairness/verifiable-randomness) to verify the active seed is authorized for your wallet and expiry.
 - [State commit-reveal](/protocol/provable-fairness/verifiable-randomness) as an additional mechanism used by Blackjack to hide game state during play.
+
+Scatter combines a server seed, a client seed, and verifiable VRF randomness to determine game outcomes.
+
+Before betting, your app receives the active server seed and a signed authorization tied to your wallet and an expiry. The game program verifies this authorization when processing the transaction.
+
+The server seed is available before the bet resolves. Knowing the seeds alone does not reveal the future VRF output.
+
+Blackjack additionally uses a separate secret commitment to conceal the dealer’s hole card during play.
 
 ### Verifying outcomes yourself
 
@@ -23,7 +31,7 @@ The onchain artifacts for a bet include:
 
 - The VRF request and proof
 - The VRF output that was consumed
-- The client seed and server seed (with prior seeds revealed once rotated)
+- The client seed and server seed used for the bet
 - Any commit-reveal hashes and revealed state (Blackjack)
 - The bet parameters (game, stake, configuration)
 

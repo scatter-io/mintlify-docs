@@ -56,21 +56,23 @@ The house edge is 1%.
 
 ### Fairness
 
-Mines uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. The mechanism applies differently in Manual and Auto modes because the play patterns are different, but both modes share the same three inputs per VRF draw:
+Mines uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with server-seed authorization for provable fairness. The mechanism applies differently in Manual and Auto modes because the play patterns are different, but both modes share the same three inputs per VRF draw:
 
-1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past round can be verified.
+1. Server seed: the active server seed is provided to your app before betting, together with a signed authorization tied to your wallet and an expiry. The game program verifies this authorization when processing the transaction.
 2. Client seed: a value managed by your client as a hash chain, advanced on each VRF request.
 3. VRF output: a fresh on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) verifiable against its cryptographic proof.
 
+The server seed is available before the bet resolves. Knowing the seeds alone does not reveal the future VRF output.
+
 #### Manual mode
 
-Each tile reveal is its own VRF + seed commit-reveal. When you click a tile, the program makes a fresh VRF request and the tile's outcome is decided at that moment, bound to the current seeds and the conditional probability based on how many mines remain in the unrevealed tiles.
+Each tile reveal uses its own VRF request with server-seed authorization. When you click a tile, the program makes a fresh VRF request and the tile's outcome is decided at that moment, bound to the current seeds and the conditional probability based on how many mines remain in the unrevealed tiles.
 
 There is no pre-committed mine layout. The unrevealed portion of the grid cannot be derived from previous reveals because each tile's randomness is independent. A final VRF call at cash out or round end resolves the positions of the remaining hidden tiles for display.
 
 #### Auto mode
 
-The full round resolves in a single VRF + seed commit-reveal. Your tile picks are committed in the start transaction along with the seeds, then a single VRF callback resolves the entire mine layout. The picked tiles are checked against the layout: if any are mines, the round pays 0, otherwise it pays at the gem-count multiplier.
+The full round resolves through a single VRF request with server-seed authorization. Your tile picks are committed in the start transaction along with the seeds, then a single VRF callback resolves the entire mine layout. The picked tiles are checked against the layout: if any are mines, the round pays 0, otherwise it pays at the gem-count multiplier.
 
 The mine layout is derived deterministically from the seeds (committed in the start transaction) and the VRF output (delivered in the callback). No party can predict or manipulate the layout: the seeds are fixed at submission and the VRF is independently verifiable.
 

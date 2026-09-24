@@ -74,11 +74,13 @@ The house edge is 1%.
 
 ### Fairness
 
-Blitz uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal for provable fairness. Each bet incorporates three inputs:
+Blitz uses [VRF](/protocol/provable-fairness/verifiable-randomness) combined with server-seed authorization for provable fairness. Each bet incorporates three inputs:
 
-1. Server seed: a secret committed by Scatter ahead of time. The seed is rotated every 12 hours, and previous seeds are revealed so any past bet can be verified.
+1. Server seed: the active server seed is provided to your app before betting, together with a signed authorization tied to your wallet and an expiry. The game program verifies this authorization when processing the transaction.
 2. Client seed: a value managed by your client as a hash chain, advanced on each bet.
 3. VRF output: an on-chain Verifiable Random Function output (MagicBlock Ephemeral VRF) that anyone can verify against its cryptographic proof.
+
+The server seed is available before the bet resolves. Knowing the seeds alone does not reveal the future VRF output.
 
 The sequence of cards is derived deterministically from these inputs by repeatedly mapping segments of the VRF output to indices in the 52-card pool. Cards are drawn one at a time and checked against the cards drawn so far; the first duplicate or the target hit ends the round.
 

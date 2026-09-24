@@ -25,7 +25,7 @@ description: "Find answers to common questions about Scatter."
   </Accordion>
 
   <Accordion title="How are Scatter game outcomes generated and verified?">
-    Scatter games use onchain [VRF randomness](/protocol/provable-fairness/verifiable-randomness) combined with seed commit-reveal. Each bet exposes the inputs needed to re-derive the outcome, and the [Verify button](/protocol/provable-fairness/overview) lets you confirm that the result matches the published onchain data.
+    Scatter games combine [verifiable VRF randomness](/protocol/provable-fairness/verifiable-randomness) with a client seed and an authorized server seed to determine outcomes. Blackjack additionally uses a separate secret commitment to conceal the dealer’s hole card during play. The in-app **provably fair** tool checks the result.
   </Accordion>
 
   <Accordion title="What is the Scatter Bankroll Vault?">

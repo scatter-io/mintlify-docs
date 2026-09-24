@@ -40,3 +40,28 @@ Level-up is Scatter's player progression system. Every bet contributes to lifeti
 Mythic grants a permanent +10% boost to the player's rakeback rate in lieu of a one-time bonus.
 
 Levels are deterministic and based purely on edge generated. There is no application process, no host relationship, and no discretionary upgrades.
+
+```mermaid
+flowchart TD
+    A["An eligible bet finishes<br/>Win or lose"] --> B["Rewards build up"]
+
+    B --> R["Rakeback<br/>Available to claim immediately"]
+    B --> V["Reload rewards<br/>Unlock in daily portions over 7 days"]
+    B --> L["Level-up bonus<br/>Builds up until your next VIP level"]
+
+    V --> VC["Claim unlocked rewards<br/>24-hour wait between claims"]
+    L --> LC["Reach the next level<br/>Your accumulated bonus unlocks"]
+
+    R -->|"Claim rakeback"| BAL["Rewards added to your Scatter balance"]
+    VC --> BAL
+    LC -->|"Claim level-up bonus"| BAL
+
+    BAL --> W["Available to play or withdraw"]
+
+    classDef play fill:#e8efff,stroke:#5479ce,color:#20365b
+    classDef rewards fill:#e3f5e9,stroke:#27945b,color:#153c27
+    classDef waiting fill:#fff2d9,stroke:#c89533,color:#5b4218
+    class A,B,BAL,W play
+    class R,LC rewards
+    class V,L,VC waiting
+```

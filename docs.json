@@ -31,6 +31,7 @@
             "group": "Onboarding",
             "icon": "wallet",
             "pages": [
+              "onboarding/account-security",
               "onboarding/depositing",
               "onboarding/swap",
               "onboarding/withdrawing"

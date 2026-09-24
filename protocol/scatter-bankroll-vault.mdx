@@ -51,4 +51,24 @@ The full vault is available for redemption at any time after the 1-day lock. The
 
 SLP is not currently able to be transferred from the embedded wallet. We intend to make SLP transferrable in a future update.
 
+```mermaid
+flowchart TD
+    A["Deposit USDC"] --> B["Wait for the next deposit batch"]
+    B --> C["Receive SLP shares<br/>Your money joins the vault"]
+    C --> D["Hold your shares"]
+
+    D -.-> E["The vault backs player bets<br/>House profits increase your share value<br/>House losses decrease it"]
+
+    D -->|"After the lockup ends"| F["Request a withdrawal"]
+    F --> G["Wait for the next withdrawal batch<br/>Your SLP is exchanged for USDC"]
+    G --> H["Claim USDC to your wallet"]
+
+    classDef funds fill:#e8efff,stroke:#5479ce,color:#20365b
+    classDef shares fill:#e3f5e9,stroke:#27945b,color:#153c27
+    classDef waiting fill:#fff2d9,stroke:#c89533,color:#5b4218
+    class A,H funds
+    class C,D,E shares
+    class B,F,G waiting
+```
+
 ---

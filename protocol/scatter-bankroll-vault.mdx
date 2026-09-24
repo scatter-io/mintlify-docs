@@ -35,9 +35,11 @@ For deposits, newly minted SLP enters a **deposit lockup that starts when the ep
 
 ### Withdrawing
 
-To exit, burn SLP to redeem the proportional amount of Cash at the current exchange rate.
+Once your deposit lockup ends, you can request a withdrawal using your available SLP.
 
-The full vault is available for redemption at any time after the 1-day lock. There are no withdrawal queues, caps, or notice periods. 
+Your request joins an open epoch. When that epoch finalizes, the requested SLP is burned and converted to USDC at the epoch's finalized exchange rate. After processing and collection complete, the USDC appears in your Scatter balance.
+
+Withdrawals are processed in batches rather than instantly. Timing depends on epoch finalization and required settlements, and processing can be delayed while the vault is halted. There is no additional deposit lockup on withdrawals.
 
 ### Risk
 
